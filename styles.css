@@ -46,9 +46,10 @@ nav a:hover {
 .centered-image img {
     max-width: 33%;
     height: auto;
+    width: auto;
     border-radius: 15px; /* Ensure the image corners match the container */
-    height: 700px;
-    width: 500px;
+    /*height: 700px;
+    width: 500px;*/
 }
 
 .education {
