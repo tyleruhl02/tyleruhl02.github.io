@@ -16,8 +16,8 @@ var displayed = [];
 var flags = [];
 var bombSet = false;
 var flagsRemaining = BOMBS;
-
 var ctrlPressed = false;
+
 window.onkeyup = function(e) {
     if(e.keyCode == 17) {
         ctrlPressed = false;
@@ -258,6 +258,8 @@ function expandDisplayed() {
             }
         }
     }
+
+    getDisplayed();
 }
 
 function getAdjacentBombs(xPos, yPos) {
@@ -390,9 +392,44 @@ function setFlag(xPos, yPos) {
     }
 }
 
+function getDisplayed() {
+    var dispo = 0;
+    for(var i = 0; i < displayed.length; i++) {
+        for(var j = 0; j < displayed[i].length; j++) {
+            if(displayed[i][j] == false) {
+                dispo++;
+            }
+        }
+    }
+    if(dispo == BOMBS) {
+        console.log("YOU WIN!");
+        ctx.beginPath();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "100px serif";
+        ctx.fillText("YOU WIN!", 100, 200);
+        ctx.closePath();
+    }
+    else {
+        console.log(dispo);
+    }
+}
+
+function resetGame() {
+    console.log("YOU LOSE!")
+    board = [];
+    displayed = [];
+    flags = [];
+    bombSet = false;
+    flagsRemaining = BOMBS;
+    ctrlPressed = false;
+    displayedRemaining = -1;
+    setBackground();
+}
+
 function setClick(xPos, yPos) {
     if(!flags[xPos][yPos] && board[xPos][yPos] == -1) {
-        console.log("YOU LOSE!");
+        resetGame();
+        return -1;
     }
     else {
         displayed[xPos][yPos] = true;
@@ -421,7 +458,10 @@ function onClick(event) {
         setFlag(xPos, yPos);
     }
     else {
-        setClick(xPos, yPos);
+        gameOver = setClick(xPos, yPos);
+        if(gameOver == -1) {
+            return;
+        }
     }
     displayBoard();
 }
